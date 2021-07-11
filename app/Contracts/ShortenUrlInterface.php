@@ -30,6 +30,12 @@ interface ShortenUrlInterface
     public function findByUrl(string $url);
 
     /**
+     * @param string $code
+     * @return  Url|Model
+     */
+    public function findByShortCode(string $code);
+
+    /**
      * @param string $shortUrl
      * @return mixed
      */

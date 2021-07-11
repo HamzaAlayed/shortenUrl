@@ -6,6 +6,7 @@ use App\Contracts\ShortenUrlInterface;
 use App\Models\Url;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class ShortenUrlRepository implements ShortenUrlInterface
@@ -34,9 +35,22 @@ class ShortenUrlRepository implements ShortenUrlInterface
         return $isSimple ? $this->url->simplePaginate($perPage) : $this->url->paginate($perPage);
     }
 
+    /**
+     * @param string $url
+     * @return Url|Builder|Model|object|null
+     */
     public function findByUrl($url)
     {
         return $this->url->whereUrl($url)->first();
+    }
+
+    /**
+     * @param string $code
+     * @return Url|Builder|Model|object|null
+     */
+    public function findByShortCode($code)
+    {
+        return $this->url->whereShorter($code)->first();
     }
 
     /**

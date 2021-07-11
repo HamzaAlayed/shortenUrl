@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Contracts\ShortenUrlInterface;
 use App\Http\Requests\UrlRequest;
 use App\Http\Resources\UrlResource;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 
 class UrlController extends Controller
 {
@@ -31,6 +34,21 @@ class UrlController extends Controller
     public function index(): JsonResponse
     {
         return response()->json(UrlResource::collection($this->shortenUrl->paginate()));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param string $code
+     * @return Application|RedirectResponse|Redirector|JsonResponse
+     */
+    public function show(string $code)
+    {
+        $shorten = $this->shortenUrl->findByShortCode($code);
+        if (!$shorten) {
+            return response()->json(['message' => 'URL not found'], 404);
+        }
+        return redirect($shorten->url);
     }
 
     /**
