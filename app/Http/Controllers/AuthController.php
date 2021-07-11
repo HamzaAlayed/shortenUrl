@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Http\JsonResponse;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use JWTAuth;
-
 
 class AuthController extends Controller
 {
@@ -39,6 +38,23 @@ class AuthController extends Controller
     }
 
     /**
+     * Get the token array structure.
+     *
+     * @param string $token
+     *
+     * @return JsonResponse
+     */
+    protected function createNewToken(string $token): JsonResponse
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
+            'user' => new UserResource(auth()->user())
+        ]);
+    }
+
+    /**
      * Register a User.
      *
      * @param RegisterRequest $request
@@ -56,7 +72,6 @@ class AuthController extends Controller
             'user' => $user
         ], 201);
     }
-
 
     /**
      * Log the user out (Invalidate the token).
@@ -79,23 +94,4 @@ class AuthController extends Controller
     {
         return $this->createNewToken(JWTAuth::refresh());
     }
-
-
-    /**
-     * Get the token array structure.
-     *
-     * @param string $token
-     *
-     * @return JsonResponse
-     */
-    protected function createNewToken(string $token): JsonResponse
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60,
-            'user' => new UserResource(auth()->user())
-        ]);
-    }
-
 }

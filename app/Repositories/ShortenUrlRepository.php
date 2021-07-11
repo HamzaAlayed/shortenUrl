@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Repositories;
-
 
 use App\Contracts\ShortenUrlInterface;
 use App\Models\Url;
@@ -36,7 +34,8 @@ class ShortenUrlRepository implements ShortenUrlInterface
         return $isSimple ? $this->url->simplePaginate($perPage) : $this->url->paginate($perPage);
     }
 
-    public function findByUrl($url){
+    public function findByUrl($url)
+    {
         return $this->url->whereUrl($url)->first();
     }
 
@@ -49,6 +48,20 @@ class ShortenUrlRepository implements ShortenUrlInterface
         $data['shorter'] = $this->shorter();
         $data['user_id'] = auth()->guard('api')->id();
         return $this->url->create($data);
+    }
+
+    /**
+     *
+     * @return false|string
+     */
+    private function shorter()
+    {
+        $hash = substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
+        $check = $this->url->whereShorter($hash)->exists();
+        if ($check) {
+            $this->shorter();
+        }
+        return $hash;
     }
 
     /**
@@ -66,19 +79,5 @@ class ShortenUrlRepository implements ShortenUrlInterface
         }
 
         return null;
-    }
-
-    /**
-     *
-     * @return false|string
-     */
-    private function shorter()
-    {
-        $hash = substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
-        $check = $this->url->whereShorter($hash)->exists();
-        if ($check) {
-            $this->shorter();
-        }
-        return $hash;
     }
 }

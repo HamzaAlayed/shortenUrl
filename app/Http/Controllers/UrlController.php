@@ -30,7 +30,7 @@ class UrlController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(UrlResource::collection($this->shortenUrl->paginate()), 200);
+        return response()->json(UrlResource::collection($this->shortenUrl->paginate()));
     }
 
     /**
@@ -49,7 +49,6 @@ class UrlController extends Controller
         }
 
         return response()->json(new UrlResource($shorten), $code);
-
     }
 
     /**
@@ -66,6 +65,6 @@ class UrlController extends Controller
         }
 
         $message = $isDeleted ? 'URL deleted' : 'URL not deleted, please try again later!';
-        return response()->json(['message' => $message], 200);
+        return response()->json(['message' => $message]);
     }
 }

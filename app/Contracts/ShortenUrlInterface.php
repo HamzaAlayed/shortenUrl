@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Contracts;
-
 
 use App\Models\Url;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

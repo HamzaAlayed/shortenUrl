@@ -27,14 +27,14 @@ class UrlRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url'=>'required|url'
+            'url' => 'required|url'
         ];
     }
 
     public function messages(): array
     {
         return [
-            'url.required'=>'Url is required, can not be empty!'
+            'url.required' => 'Url is required, can not be empty!'
         ];
     }
 }

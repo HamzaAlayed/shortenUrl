@@ -33,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Query\Builder|Url onlyTrashed()
  * @method static \Illuminate\Database\Query\Builder|Url withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Url withoutTrashed()
- * @property-read \App\Models\User|null $user
+ * @property-read User|null $user
  */
 class Url extends Eloquent
 {
@@ -46,7 +46,7 @@ class Url extends Eloquent
     ];
 
     protected $fillable = [
-        'url', 'shorter','user_id'
+        'url', 'shorter', 'user_id'
     ];
 
     public function user(): BelongsTo
