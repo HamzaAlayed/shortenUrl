@@ -47,6 +47,7 @@ class ShortenUrlRepository implements ShortenUrlInterface
     public function create(array $data)
     {
         $data['shorter'] = $this->shorter();
+        $data['user_id'] = auth()->guard('api')->id();
         return $this->url->create($data);
     }
 

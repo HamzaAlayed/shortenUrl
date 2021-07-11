@@ -42,11 +42,13 @@ class UrlController extends Controller
     public function store(UrlRequest $request): JsonResponse
     {
         $shorten = $this->shortenUrl->findByUrl($request->url);
+        $code = 200;
         if (!$shorten) {
+            $code = 201;
             $shorten = $this->shortenUrl->create($request->all());
         }
 
-        return response()->json(new UrlResource($shorten), 200);
+        return response()->json(new UrlResource($shorten), $code);
 
     }
 

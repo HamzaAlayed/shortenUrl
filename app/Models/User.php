@@ -12,6 +12,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * App\Models\User
@@ -40,7 +41,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|User whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
@@ -73,4 +74,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(): array
+    {
+        return [];
+    }
 }

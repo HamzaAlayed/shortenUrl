@@ -46,7 +46,7 @@ class Url extends Eloquent
     ];
 
     protected $fillable = [
-        'url', 'shorter'
+        'url', 'shorter','user_id'
     ];
 
     public function user(): BelongsTo
