@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property string url
+ */
 class UrlRequest extends FormRequest
 {
     /**
@@ -11,9 +14,9 @@ class UrlRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +24,17 @@ class UrlRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'url'=>'required|url'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'url.required'=>'Url is required, can not be empty!'
         ];
     }
 }

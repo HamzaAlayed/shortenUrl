@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ShortenUrlInterface;
 use App\Http\Requests\UrlRequest;
-use Illuminate\Http\Response;
+use App\Http\Resources\UrlResource;
+use Illuminate\Http\JsonResponse;
 
 class UrlController extends Controller
 {
@@ -25,55 +26,44 @@ class UrlController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return response()->json(UrlResource::collection($this->shortenUrl->paginate()), 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param UrlRequest $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function store(UrlRequest $request)
+    public function store(UrlRequest $request): JsonResponse
     {
-        //
-    }
+        $shorten = $this->shortenUrl->findByUrl($request->url);
+        if (!$shorten) {
+            $shorten = $this->shortenUrl->create($request->all());
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        return response()->json(new UrlResource($shorten), 200);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UrlRequest $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(UrlRequest $request, $id)
-    {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return Response
+     * @param UrlRequest $request
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(UrlRequest $request): JsonResponse
     {
-        //
+        $isDeleted = $this->shortenUrl->delete($request->url);
+        if ($isDeleted === null) {
+            return response()->json(['message' => 'URL not found'], 404);
+        }
+
+        $message = $isDeleted ? 'URL deleted' : 'URL not deleted, please try again later!';
+        return response()->json(['message' => $message], 200);
     }
 }
